@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>For My Love ❤️</title>
+
+<style>
+:root{
+--pink:#ff2e74;
+--safe:env(safe-area-inset-bottom);
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:linear-gradient(#050509,#0b0b16);
+color:white;
+font-family:Segoe UI, sans-serif;
+text-align:center;
+overflow-x:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+
+/* PERFECT PHONE HEIGHT FIX */
+section{
+min-height:100svh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:28px 18px calc(90px + var(--safe));
+opacity:0;
+transform:translateY(60px);
+transition:1s;
+}
+
+section.show{opacity:1;transform:translateY(0)}
+
+h1{
+font-size:clamp(26px,7vw,46px);
+margin:12px 0;
+line-height:1.25;
+}
+
+p{
+font-size:clamp(16px,4.3vw,20px);
+line-height:1.5;
+}
+
+canvas{
+position:fixed;
+top:0;left:0;
+z-index:-1
+}
+
+/* BIG MOBILE BUTTON */
+.btn{
+min-height:56px;
+width:min(92%,340px);
+padding:16px 24px;
+border-radius:50px;
+border:none;
+background:var(--pink);
+color:white;
+font-size:18px;
+font-weight:600;
+letter-spacing:.3px;
+cursor:pointer;
+box-shadow:0 0 18px var(--pink);
+margin-top:22px;
+}
+
+.btn:active{transform:scale(.96)}
+
+.letter{
+max-width:720px;
+width:94%;
+background:rgba(255,255,255,0.09);
+padding:22px 18px;
+border-radius:22px;
+backdrop-filter:blur(14px);
+display:none;
+animation:open 1s ease forwards
+}
+
+@keyframes open{
+from{transform:scale(.75) translateY(40px);opacity:0}
+to{transform:scale(1) translateY(0);opacity:1}
+}
+
+.type{
+font-size:clamp(16px,4.4vw,20px);
+white-space:pre-wrap;
+line-height:1.7;
+text-align:left;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-top:24px;
+}
+
+.gallery img{
+width:100%;
+aspect-ratio:3/4;
+object-fit:cover;
+border-radius:16px;
+box-shadow:0 0 14px #000;
+}
+
+.shayri{
+margin-top:24px;
+font-style:italic;
+font-size:clamp(17px,4.5vw,22px);
+color:#ffd1e6;
+line-height:1.6;
+}
+
+.ring{
+font-size:44px;
+display:none;
+margin-top:25px;
+animation:pop 1s infinite alternate
+}
+
+@keyframes pop{
+from{transform:scale(1)}
+to{transform:scale(1.25)}
+}
+</style>
+
+</head>
+<body>
+
+<audio id="music" loop>
+<source src="WhatsApp Audio 2026-02-14 at 00.51.16.aac" type="audio/mpeg">
+</audio>
+
+<canvas id="hearts"></canvas>
+
+<section onclick="playMusic()">
+<h1>Hi bbu my rasgulle 💖</h1>
+<p>Tap anywhere... I made this only for you 🌙</p>
+</section>
+
+<section>
+<h1 id="typing"></h1>
+</section>
+
+<section>
+<button class="btn" onclick="openLetter()">Open My Heart 💌</button>
+
+<div class="letter" id="letter">
+<p class="type" id="letterText"></p>
+
+<div class="gallery">
+<img src="pic1 (1).jpeg">
+<img src="pic1 (2).jpeg">
+<img src="pic1 (3).jpeg">
+<img src="pic1 (4).jpeg">
+</div>
+
+<div class="shayri">
+"तेरी हंसी मेरी पहचान बन गई,<br>
+तेरी बातें मेरी जान बन गई,<br>
+कुछ भी नहीं था मेरी जिंदगी में पहले,<br>
+और अब तू मेरी दुनिया बन गई ❤️"
+</div>
+
+<br>
+<button class="btn" onclick="showRing()">One Last Surprise...</button>
+
+<div class="ring" id="ring">
+💍 Will you be mine forever supriya ❤️?
+</div>
+
+<p style="margin-top:20px">— Apka bbu (vipul)</p>
+
+</div>
+</section>
+
+<script>
+// music tap start (mobile fix)
+function playMusic(){
+document.getElementById("music").play();
+}
+
+// hearts
+const canvas=document.getElementById('hearts');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
+resize();addEventListener('resize',resize);
+
+let hearts=[];
+for(let i=0;i<150;i++){
+hearts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2+1,v:Math.random()*1+0.3});
+}
+function drawHeart(x,y,s){
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.bezierCurveTo(x-s,y-s,x-2*s,y+s,x,y+2*s);
+ctx.bezierCurveTo(x+2*s,y+s,x+s,y-s,x,y);
+ctx.fillStyle='rgba(255,80,140,0.85)';
+ctx.fill();
+}
+function anim(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+hearts.forEach(h=>{h.y+=h.v;if(h.y>canvas.height)h.y=0;drawHeart(h.x,h.y,h.s)});
+requestAnimationFrame(anim)}
+anim();
+
+// scroll reveal
+const sections=document.querySelectorAll("section");
+window.addEventListener("scroll",()=>{
+sections.forEach(sec=>{
+if(sec.getBoundingClientRect().top<window.innerHeight-100)
+sec.classList.add("show");
+});
+});
+
+// intro typing
+const typing=document.getElementById("typing");
+const text="Since you came into my life, everything feels warmer and calmer...";
+let i=0;
+function type(){
+if(i<text.length){
+typing.innerHTML+=text[i];
+i++;
+setTimeout(type,40);
+}}
+setTimeout(type,1200);
+
+// letter typing
+const letterBox=document.getElementById("letter");
+const letterText=document.getElementById("letterText");
+
+const letter=`supriya my bbu ❤️,
+
+I never believed one person could become my peace…
+until you happened.
+
+You turned ordinary days
+into memories I never want to lose.
+
+I don't want a perfect relationship,
+I just want YOU.
+
+No matter where life takes us,
+my place will always be beside you.
+
+Forever yours ❤️`;
+
+let j=0;
+function typeLetter(){
+if(j<letter.length){
+letterText.innerHTML+=letter[j];
+j++;
+setTimeout(typeLetter,35);
+}}
+
+function openLetter(){
+letterBox.style.display='block';
+letterText.innerHTML="";
+j=0;
+typeLetter();
+}
+
+function showRing(){
+document.getElementById('ring').style.display='block';
+}
+</script>
+
+</body>
+</html>
